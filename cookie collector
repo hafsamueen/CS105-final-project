@@ -1,0 +1,198 @@
+// Hafsa Mueen 
+// hmueen
+
+/*
+<project>
+Hafsa Mueen 
+hmueen
+
+INSTRUCTIONS
+<explain what your program does and how to use it>
+- my program is a game where you move a character around the canvas to collect 
+	points from cookies that are falling from the sky. to move the character around the
+	screen you use the left, right, up and down arrow keys. there are certain cookies
+	in the game that can be hit, and others which cant be hit. the cookie that cant be 
+	hit is worth no points and will cause the game to be over.  
+
+VIDEO
+< https://youtu.be/mfWj3N4lKpY >
+
+RELEASE
+I <Hafsa Mueen> grant permission to CS105 course staff to use
+my Final Project program and video for the purpose of promoting CS105.
+<if you don't grant permission, erase the line above>
+
+BASIC CONCEPTS
+<List the best examples of the "Basic Concepts" used in the Final Project with a brief description of how/where each is used>
+- Drawing shapes:
+	- the main background that is used throughout all the different game screens was drawn 
+		using ellipses, triangles, quads and text, then in the the other game screens rectangles 
+		and squares were used as well. 
+		
+- conditionals:
+	- the conditionals used to change to the different game screens. this is used to change the canvas 
+		from splash screen to instruction screen to game screen to game over screen, and it repeats; used in
+		the draw and mousePressed functions. 
+	- the conditionals used to ensure that when moving the game character around the canvas, its not 
+		able to 'leave' the game screen; used in 'game screen'. 
+	- the conditionals used to randomize the cookies 'falling' from the 'sky'. this is used to  
+		used in the 'game screen'. 
+
+- user defined functions:
+	- user defined functions are used all throughout my code. 
+		- the functions used to draw the different game backgrounds 
+			- mainBackground(); 
+			- splashScreen(); 
+			- instructionScreen(); 
+			- gameScreen(); 
+			- gameOver();
+		- the functions used to resize the images used in the game
+			- images are resized in main background tab with the user
+				functions gameCharacter(x, y) and gameCookie(i, x, y) 
+		- the gameReset(); function 
+			- used in the cookie hit test, speech bubble function 
+				and game over tab where the function has certain 
+				global variables that need to be reset for the game 
+				to properly work after it has already been played. 
+
+- loops: 
+	- the loop used to draw the cookies used in the game screen tab
+		- draws the array of cookies spaced out on the canvas and changes 
+			the 'speed' and index position of the cookies. 
+
+- arrays:
+	- the arrays used for handling the falling cookies in the game screen tab
+		- cookie[]; has the images of the cookies used 
+		- randomCookie[]; selects a random index position from the cookie array
+			to decide what cookie will be drawn on the canvas. 
+		- cookieY[]; is used for the starting position of the cookies animated on the screen
+		- speed[]; is used to randomly decide the speed at which the cookies are animated
+
+- Mouse/keyboard interactions: 
+	- keyboards interactions are used to move the game characer around the screen; 
+	  the left arrow key, right arrow key, up arrow and down arrow key are used.
+		they are also used in muting and unmuting the background music of the game, 
+		both 'M' and 'm' can be used to mute the music, and both 'P' and 'p' can be
+		used to play the music after it has been muted. 
+	- mouse interactions are used to switch between game screens; clicking the 'PLAY'
+		button in the splashScreen will take you to the instruction screen, clicking
+		anywhere on the instruction screen will take you to the game screen. there are 
+		no mouse interactions on the game screen. once the game is over, you can click 
+		the 'REPLAY' button and it will take you back to the splash screen. 
+
+EXTENDED CONCEPTS
+<List the "Extended Concepts" used in the Final Project with a brief description of how/where each is used>
+- Circle hit test: 
+	- used in the game screen section 
+	- the hit test uses the cookies that are 'falling' from the 'sky' and the 
+	  character that moves around the canvas using the arrow keys. 
+		- the hit test checks if the x and y position of the character 
+		  and the x and y position of the cookies are the same; 
+			it checks for the distance from middle of cookie to middle 
+			of player vertically and the distance from middle of cookie 
+			to middle of player horizontally.
+		- if they are the same whichever cookie that hits the character will 
+			increase the score in "cookies collected" text and if the character hits 
+			the 'moldy' cookie the canvas will switch to the game over screen. 
+	
+- Loading and displaying images:
+	- all images are loaded in the pre-load function and are 
+		global variables that are used throughout the entire game.
+	- all images have been resized to fit the canvas size I chose. 
+	- the images are used throughout all the game screens. 
+	
+- Sound:
+	- there is music being played in the background of the game.
+	- the sound can be muted and unmuted using the designated keys. 
+
+CODING QUALITY AND VISUAL DESIGN
+<argue for your coding quality and visual design>
+	- I drew both the game character and the cookies that are used in the game using procreate.
+	- I added comments to describe what my code is doing. 
+	- all my code is organized into different sections.   
+
+*/
+
+// Cookie Collector ----------------------------------------------------------------------------------------
+
+let music; // background music
+
+let playerImg; // game charecter image 
+let playerHeight; // variable used for resizing myCharacter.png
+let playerWidth; // variable used for resizing myCharacter.png
+let playerX = 465; // starting x - position for game character
+let playerY = 350; // starting y - position for game character 
+
+let buttonX; // x - position for the starting game button 
+let buttonY = 300; // y - position for starting game button 
+let screen = 0; // used for screen conditionals
+let snow = []; // array used for the x position of the snow/ground
+
+let cookie = []; // falling game objects array
+let randomCookie = []; // array to select random cookies from cookie array 
+let cookieY = []; // starting y - position for falling cookies 
+let speed = []; // array for speed of the falling cookies
+
+function preload() {
+	playerImg = loadImage("myCharecter.png"); // 217 x 369 
+	music = loadSound("gameMusic.mp3"); // sound taken from Zakhar Valaha on pixaby
+
+	cookie[0] = loadImage("cookie.png"); // 181 x 182 
+	cookie[1] = loadImage("pinkcookie.png"); // 181 x 182 
+	cookie[2] = loadImage("rainbowcookie.png"); // 181 x 182 
+	cookie[3] = loadImage("purplecookie.png"); // 181 x 182 
+	cookie[4] = loadImage("moldycookie.png"); // 181 x 182 
+}
+
+function setup() {
+	createCanvas(1000, 640);
+	background("#88D5E8"); // blue
+	music.play();
+	buttonX = width / 2; // x - position for the starting game button
+
+	// initialize 5 array elements to 0
+	for (let i = 0; i < 5; i++) {
+		snow[i] = 0; // used in game background
+	}
+
+	// intializes 5 array elements to cookie array length
+	for (let i = 0; i < cookie.length; i++) {
+		cookieY[i] = 10; // starting y - position for falling cookies in game screen
+		randomCookie[i] = int(random(5)); // chooses random index position from cookie array
+		speed[i] = random(0.4, 1); // speed of the cookies falling in the game screen
+	}
+}
+
+function draw() {
+	if (screen === 0) { // conditionals for drawing the different game screens
+		splashScreen(0, 0);
+	} else if (screen === 1) {
+		instructionScreen(0, 0);
+	} else if (screen === 2) {
+		gameScreen(0, 0);
+	} else if (screen === 3) {
+		gameOver(0, 0);
+	}
+}
+
+function mousePressed() {  
+	if (mouseX > buttonX - 45 && mouseX < buttonX + 45 && mouseY > buttonY - 25 && mouseY < buttonY + 25 && screen === 0) { // splash screen to instruction screen
+		screen = 1; // instruction screen
+	} else if (screen === 1) {
+		screen = 2; // game screen 
+	} else if (mouseX > buttonX - 45 && mouseX < buttonX + 45 && mouseY > buttonY - 25 && mouseY < buttonY + 25 && screen === 3) { // game over screen to splash screen 
+		screen = 0; // splash screen 
+	}
+}
+
+function keyPressed() {
+	if (key === 'm' || key === 'M') { // stops playing background music
+    if (music.isPlaying()) {
+      music.stop();
+    }
+  } else if (key === 'p' || key === 'P') { // starts playing background music
+    if (!music.isPlaying()) {
+      music.play();
+    }
+  }
+} 
