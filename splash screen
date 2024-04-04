@@ -1,0 +1,78 @@
+// Splash Screen ----------------------------------------------------------------------------------------
+
+let buttonWidth = 100; // width used for the button that switches the splashscreen to the instruction
+let buttonHeight = 50; // height used for the button that switches the splashscreen to the instruction
+let splashScreenX = 500; // x - position used for text on splashScreen
+let splashScreenY = 200; // y - position used for text on splashScreen
+let textSize = 50 // size of text 
+
+/* this function draws the splash screen (the first screen that is seen
+in the game) which is drawn at position (x, y) on the canvas */
+
+function splashScreen(x, y) {
+	mainBackground(0, 0);
+	cookieBorder();
+	gameCharacter(playerX, playerY);
+	drawButton(width / 2, 300, "#C3C3F3", "PLAY"); // game button
+
+	strokeWeight(1);
+	textAlign(CENTER);
+	textStyle(BOLD);
+	gameText("C O O K I E", "#C3C3F3", "#5E5EAE", 'Bradley Hand', textSize, splashScreenX, splashScreenY); // game title
+	textStyle(NORMAL);
+	gameText("C O L L E C T O R", "#C3C3F3", "#5E5EAE", 'Fantasy', textSize, splashScreenX, splashScreenY + 55); // game title  
+}
+
+// On Screen Features ----------------------------------------------------------------------------------------
+
+/* this function draws customizable text at position (x, y) on the canvas. 't' is the text that gets written, 's' 
+is the stroke colour, 'c' is the fill colour, 'font' is the texts font style and 'size' is the size of the text */
+
+function gameText(t, s, c, font, size, x, y) {
+	stroke(s);
+	fill(c);
+	textFont(font, size);
+	text(t, x, y);
+}
+
+/* this function draws the a clickable button at position (x, y) on the canvas. 'c' is
+the fill colour of the button and 't' is the text that is written in the button. */
+
+function drawButton(x, y, c, t) {
+	rectMode(CENTER);
+	strokeJoin(BEVEL);
+	strokeWeight(1);
+	stroke("#5858A3"); // purple
+	rect(x, y, buttonWidth, buttonHeight);
+
+	if (mouseX > x - 45 && mouseX < x + 45 && mouseY > y - 25 && mouseY < y + 25) {
+		fill(c);
+	} else {
+		fill("#B2B2E7"); // periwinkle
+	}
+
+	strokeJoin(MITER);
+	stroke("#5858A3"); // purple-blue
+	rect(x, y, buttonWidth - 20, buttonHeight - 10);
+	strokeWeight(1); // text inside button
+	gameText(t, "#5858A3", "#5858A3", 'Times New Roman', textSize - 30, x, y + 5);
+}
+
+/* this function draws rows and columns of cookies from the cookie
+array to create a border of cookies around the canvas */
+
+function cookieBorder() { // for loop to draw cookie border in y position
+	for (let y = 1; y < 13; y++) {
+		cookieWidth = 45.25;
+		cookieHeight = 45.5;
+		gameCookie(3, 0, y * cookieHeight); // left border
+		gameCookie(3, width - cookieHeight, y * cookieHeight); // right border
+	}
+
+	for (let x = 0; x < 22; x++) { // for loop to draw cookie border in x position
+		cookieWidth = 45.25;
+		cookieHeight = 45.5;
+		gameCookie(3, x * cookieWidth, 0); // top border
+		gameCookie(3, x * cookieWidth, height - 48); // bottom border
+	}
+}
