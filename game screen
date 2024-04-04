@@ -1,0 +1,83 @@
+// Game Screen ----------------------------------------------------------------------------------------
+
+const MOVING = 2; // constant used to move the game charecter 
+let score = 0; // used to keep track of how many cookies have been collected
+let scoreXPos = 100; // x - position of text used to keep track of cookie points
+let scoreYPos = 20; // y - position of text used to keep track of cookie points 
+let cookieStartX = 119; // starting x - position of falling cookies
+
+/* this function draws the game screen at position (x, y) on the canvas 
+and includes the conditional statements used to move the game charecter
+around the screen to collect the falling cookies */
+
+function gameScreen(x, y) {
+	mainBackground(0, 0);
+	gameCharacter(playerX, playerY);
+	cookieHitTest();
+
+	strokeWeight(1);
+	gameText("COOKIES COLLECTED: " + score, "#5E5EAE", "#5E5EAE", 'Times New Roman', textSize - 35, scoreXPos, scoreYPos); 
+
+	for (let i = 0; i < cookie.length; i++) { // for loop that draws cookies that fall down from the 'sky'
+		gameCookie(randomCookie[i], cookieStartX * (2 * i), cookieY[i]); // spaces out falling cookies on canvas
+		cookieY[i] += speed[i]; // changes speed the cookies are falling at 
+
+		if (int(cookieY[i]) === height) { // conditional for when a falling cookie reaches the end of the canvas 
+			cookieY[i] = 10; // resets y - position 
+			randomCookie[i] = int(random(5)); // resets random index position from cookie array
+		}
+	}
+	if (keyIsPressed) {
+		if (keyCode === LEFT_ARROW) { // if statements used for moving game sprite around screen 
+			gameCharacter(playerX, playerY);
+			if (playerX != 37 - int(playerWidth) / 2) { // stops sprite from moving once x = 1
+				playerX = playerX - MOVING; // moves sprite to the left
+			}
+		}
+		if (keyCode === RIGHT_ARROW) {
+			gameCharacter(playerX, playerY);
+			if (playerX != width - 39 - int(playerWidth) / 2) { // stops sprite from moving once x = 925 
+				playerX = playerX + MOVING; // moves sprite to the right
+			}  
+		}
+		if (keyCode === DOWN_ARROW) {
+			gameCharacter(playerX, playerY);
+			if (playerY <= height - playerHeight) { // stops sprite from moving once y = 478 
+				playerY = playerY + MOVING; // moves sprite down 
+			}
+		}
+		if (keyCode === UP_ARROW) {
+			gameCharacter(playerX, playerY);
+			if (playerY != 350) { // game charecter stops moving once at y = 350
+				playerY = playerY - MOVING; // moves sprite up
+			} 
+		}
+	}
+}
+
+/* this function tests for when the cookies that are falling, 'hit' 
+the game charecter. Once a cookie has 'hit' the game character,
+its y - position get readjusted to where it originally began */
+
+function cookieHitTest() {
+	for (let i = 0; i < cookie.length; i++) {
+		let cookieHDist = cookie[i].height / 8 + playerHeight / 2; // distance from middle of cookie to middle of player vertically
+		let cookieWDist = cookie[i].width / 8 + playerWidth / 2; // distance from middle of cookie to middle of player horizontally
+
+		if ((dist(playerX + playerWidth / 2, playerY + playerHeight / 2, cookieStartX * (2 * i) + cookie[i].width / 8, cookieY[i] + cookie[i].height / 8) < cookieHDist) || // hit test using characters height
+			(dist(playerX + playerWidth / 2, playerY + playerHeight / 2, cookieStartX * (2 * i) + cookie[i].width / 8, cookieY[i] + cookie[i].height / 8) < cookieWDist)) { // hit test using characters width
+			cookieY[i] = 10; // resets y - position
+
+			if (randomCookie[i] === 0 || randomCookie[i] === 2) {
+				score = score + 1;
+			} else if (randomCookie[i] === 1 || randomCookie[i] === 3) {
+				score = score + 2;
+			}
+			if (randomCookie[i] === 4) {
+				gameReset(); 
+				return screen = 3; // game over screen
+			}
+			randomCookie[i] = int(random(5)); // randomly chooses index position from cookie array
+		}
+	}
+}
