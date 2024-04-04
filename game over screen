@@ -1,0 +1,51 @@
+// Game Over Screen ----------------------------------------------------------------------------------------
+
+let textOverX = 500; // x - position for text used in gameOver screen
+let textOverY = 395; // y - position for text used in gameOver screen 
+
+/* this function draws the screen that is shown once the sprite 'hits a moldy cookie' */
+
+function gameOver(x, y) {
+	bubbleX = 350; // x - position of thinking bubble
+	bubbleY = 530; // y - position of thinking bubble 
+	boxX = 500; // x - position of speech box
+	boxY = 420; // y - position of speech box
+	boxWidth = 150; // width of speech box
+	boxHeight = 100; //  height of speech box
+
+	mainBackground(0, 0);
+	cookieBorder();
+	drawButton(width / 2, 300, "#C3C3F3", "REPLAY");
+	gameCharacter(playerX - 210, playerY + 110);
+	speechBubble(0, 0, "#5E5EAE", "#C3C3F3");
+
+	textAlign(CENTER);
+	gameText("you gave me", "#5E5EAE", "#5E5EAE", 'Times New Roman', textSize - 35, textOverX, textOverY);
+	gameText("food poisoning", "#5E5EAE", "#5E5EAE", 'Times New Roman', textSize - 35, textOverX, textOverY + 20);
+	gameText("from the moldy", "#5E5EAE", "#5E5EAE", 'Times New Roman', textSize - 35, textOverX, textOverY + 40);
+	gameText("cookie... :(", "#5E5EAE", "#5E5EAE", 'Times New Roman', textSize - 35, textOverX + 5, textOverY + 60);
+	gameText("GAME OVER...", "#C3C3F3", "#5E5EAE", 'Fantasy', textSize + 20, textOverX + 5, textOverY - 220);
+	gameText("Total Cookies Collected : " + score, "#C3C3F3", "#5E5EAE", 'Fantasy', textSize - 30, textOverX, textOverY - 180);
+}
+
+/* this function resets certain variables used throughout the game, if the game gets played again */
+
+function gameReset() {
+	playerX = 465; // starting x - position for game character
+	playerY = 350; // starting y - position for game character 
+
+	bubbleX = 180; // intial x - position of thinking bubble
+	bubbleY = 425; // intial y - position of thinking bubble 
+	boxX = 555; // x - position of speech box
+	boxY = 200; // y - position of speech box
+	boxWidth = 600; // width of speech box
+	boxHeight = 350; // height of speech box
+
+	for (let i = 0; i < cookie.length; i++) {
+		cookieY[i] = 10; // resets y - position of falling cookies 
+	}
+
+	if (mouseX > buttonX - 45 && mouseX < buttonX + 45 && mouseY > buttonY - 25 && mouseY < buttonY + 25 && mouseIsPressed) {
+		score = 0; // resets game score back to 0 
+	}
+}
