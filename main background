@@ -1,0 +1,78 @@
+// Main Background ----------------------------------------------------------------------------------------
+
+let ar; // aspect ratio for images
+let snowX = 850; // x - position for the different snow aspects drawn
+let snowY = 550; // y - position for the different snow apsects drawn 
+let treeX = 200; // x - position for the winter trees drawn
+let treeY = 300; // y - position for the winter trees drawn
+let cookieWidth; // resizing cookie image
+let cookieHeight; // resizing cookie image
+
+/* this function draws the main background that gets used 
+throughout the entire game at position (x, y) on the canvas */
+
+function mainBackground(x, y) {
+	background("#88D5E8"); // blue
+	stroke("#C3FAFF"); // blue
+	fill("#C3FAFF"); // blue
+	ellipse(width / 2, height / 2, snowX - 100, snowY - 50); // snow hill
+
+	stroke("#D9F7F7"); // blue
+	fill("#D9F7F7"); // blue
+	ellipse(0, snowY, snowX, snowY); // snow 
+	ellipse(width, snowY, snowX, snowY); // snow
+	
+	winterTree(treeX - 140, treeY, "#D0E7F2"); // snowy tree
+	winterTree(treeX + 670, treeY, "#CCE6F2"); // snowy tree
+	winterTree(treeX, treeY + 140, "#CADDE6"); // snowy tree
+	winterTree(treeX + 550, treeY + 100, "#BED6E1"); // snowy tree 
+	winterTree(treeX + 800, treeY + 140, "#C4D8E1"); // snowy tree 
+	
+	for (let i = 0; i < snow.length; i++) { // for loop + array to draw the snowy ground 
+		const SPACE = 250;
+		let xSnowPos = snow[i] + (i * SPACE);
+		let snowWidth = 350;
+		let snowHeight = 200;
+
+		stroke("#F7F2F2"); // off-white
+		fill("#F7F2F2"); // off-white
+		ellipse(xSnowPos, snowY + 50, snowWidth, snowHeight); // first layer of snow
+		ellipse(xSnowPos, snowY, snowWidth, snowHeight); // second layer of snow 
+	}
+}
+
+/* this function draws a tree at position (x, y) on 
+the canvas. 'c' is the fill colour of the tree */
+
+function winterTree(x, y, c) {
+	strokeWeight(0);
+	fill(c);
+	quad(x - 5, y - 80, x + 5, y - 80, x + 10, y, x - 10, y); // tree trunk 
+	triangle(x - 40, y - 30, x + 40, y - 30, x, y - 150); // bottom portion of tree top
+	triangle(x - 32, y - 80, x + 32, y - 80, x, y - 150); // top portion of tree top
+}
+
+// Game Objects ----------------------------------------------------------------------------------------
+
+/* this function draws a resized image of the game charecter 
+that gets used throughtout the different game screens at 
+position (x, y) on the canvas */
+
+function gameCharacter(x, y) {
+	ar = playerImg.width / playerImg.height; // (217 / 369)
+	playerHeight = playerImg.height / 3; // (369 / 3)
+	playerWidth = playerImg.width / 3; // (217 / 3)
+	image(playerImg, x, y, playerWidth, playerHeight);
+}
+
+/* this function draws a resized image of the array of cookies 
+that gets used throughtout the different game screens at 
+position (x, y) on the canvas. [i] indicates which cookie 
+in the array is being drawn */
+
+function gameCookie(i, x, y) {
+	ar = cookie.width / cookie.height; // (181 / 182)
+	let cookieWidth = cookie[i].width / 4; // (181 / 4)
+	let cookieHeight = cookie[i].height / 4; // (182 / 4)
+	image(cookie[i], x, y, cookieWidth, cookieHeight);
+}
