@@ -1,0 +1,69 @@
+// Game Instruction Screen ----------------------------------------------------------------------------------------
+
+let instructionX = 555; // x - position of text used in instruction screen 
+let instructionY = 100; // y - position of text used in instruction screen
+
+let boxX = 555; // x - position of speech box
+let boxY = 200; // y - position of speech box
+let boxWidth = 600; // width of speech box
+let boxHeight = 350; // height of speech box
+
+let bubbleX = 180; // intial x - position of thinking bubble
+let bubbleY = 425; // intial y - position of thinking bubble 
+let bubbleSize = 5; // initial size of thinking bubbles 
+let bubbleWSpace = 25; // spacing of the x - position between the thinking bubbles 
+let bubbleHSpace = 20; // spacing of y - position between the thinking bubbles
+
+let xPosCookie = 340; // x - position of cookies shown in game instructions
+let yPosCookie = 200; // y - position of cookies shown in the game instructions 
+const COOKIE_SPACE = 100; // space between each cookie 
+
+/* this function draws the game screen that 
+displays instructions on how to play the game */
+
+function instructionScreen(x, y) {
+	xPosCookie = 340;
+	yPosCookie = 200; 
+
+	mainBackground(0, 0);
+	gameCharacter(playerX - 375, playerY + 60);
+	speechBubble(0, 0, "#8C4E82", "#D9B8C2");
+
+	for (let i = 0; i < cookie.length; i++) { // for loop to draw array of cookies
+		gameCookie(i, xPosCookie, yPosCookie);
+		xPosCookie = xPosCookie + COOKIE_SPACE;
+	}
+	
+	fill("#8C4E82"); // magenta 
+	textStyle(NORMAL);
+	textFont('Verdana', 20);
+	text("HOW TO PLAY :", instructionX, instructionY - 45);
+	text("CLICK ANYWHERE TO BEGIN PLAYING!", instructionX, instructionY + 250);
+
+	textFont('Times New Roman', 15);
+	text("Lots of cookies are falling down from the sky! Help me move around the", instructionX, instructionY);
+	text("screen and collect these cookies by using the arrow keys on your keyboard!", instructionX, instructionY + 30);
+	text("But be aware of which cookies you're collecting!", instructionX, instructionY + 60);
+
+	text("1 point", instructionX - 195, instructionY + 170); // used for cookie[0] 
+	text("1 point", instructionX + 9, instructionY + 170); // used for cookie[2] 
+	text("2 points", instructionX - 91, instructionY + 170); // used for cookie[1]
+	text("2 points", instructionX + 109, instructionY + 170); // used for cookie[3]
+	text("No points", instructionX + 209, instructionY + 170); // used for cookie[4] 
+}
+
+/* this function draws a thinking bubble text box at position (x, y) on the canvas. 
+'s' is the stroke colour and 'c' is the fill colour */
+
+function speechBubble(x, y, s, c) {	
+	strokeWeight(1);
+	stroke(s); 
+	fill(c); 
+	rect(boxX, boxY, boxWidth, boxHeight); // text box 
+
+	for (let i = 0; i < 3; i++) { // for loop for 'thinking bubbles'  
+		let size = bubbleSize + (i * 6);
+		square(bubbleX + i * bubbleWSpace, bubbleY - i * bubbleHSpace, size);
+	}
+	gameReset();
+}
